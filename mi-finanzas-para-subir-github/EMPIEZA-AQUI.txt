@@ -1,0 +1,22 @@
+MI FINANZAS — INSTRUCCIONES MUY FÁCILES
+
+PARA USARLA EN TU ORDENADOR:
+1. Descomprime este ZIP.
+2. Instala Node.js LTS si no lo tienes: https://nodejs.org
+3. Haz doble clic en iniciar-windows.bat
+4. Se abrirá tu web. Pulsa «Borrar demostración» antes de poner tus datos.
+5. Entra en «Cuentas», crea tus cuentas y empieza a añadir movimientos.
+6. En «Datos y seguridad», descarga periódicamente una copia JSON.
+
+PARA PUBLICARLA EN TU GITHUB:
+1. Instala GitHub Desktop e inicia sesión.
+2. File > Add local repository > selecciona esta carpeta.
+3. Publish repository (por ejemplo: mi-finanzas). GitHub Pages gratis necesita repositorio público.
+4. En tu repo de GitHub: Settings > Pages > Source: GitHub Actions.
+5. En Actions comprueba que termina «Publicar Mi Finanzas» en verde.
+6. En Settings > Pages aparecerá la URL de tu web.
+
+IMPORTANTE: Nunca subas el archivo de copia JSON con tus datos reales a GitHub.
+Los datos permanecen solo en cada navegador: no hay sincronización entre dispositivos.
+
+Más detalles en README.md.

@@ -1,0 +1,13 @@
+SUBIR A GITHUB (repositorio emartindesoto/mi-finanzas)
+
+1. Abre https://github.com/emartindesoto/mi-finanzas
+2. Pulsa "uploading an existing file" dentro del bloque Quick setup.
+3. Entra en la carpeta "mi-finanzas-para-subir" que has extraido del ZIP.
+4. Selecciona TODOS los archivos y carpetas de su interior.
+   Incluye especialmente .github (es la configuracion de publicacion).
+5. Arrastralos a la zona de subida de GitHub. No subas el ZIP ni la carpeta como una subcarpeta.
+6. Abajo pulsa "Commit changes".
+7. En el repo, entra en Settings > Pages > Build and deployment > Source > GitHub Actions.
+8. En Actions comprueba el flujo "Publicar Mi Finanzas".
+
+Nunca incluyas copias de seguridad JSON con datos reales en el repositorio.

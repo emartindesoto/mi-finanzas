@@ -118,3 +118,8 @@ npm run preview
 - `.github/workflows/deploy.yml`: compilación, pruebas y publicación en GitHub Pages.
 
 La rama recomendada para publicar es `main`. No se necesita servidor de datos: GitHub Pages solo distribuye los archivos estáticos. Para futuras sincronizaciones privadas entre dispositivos sería necesario incorporar autenticación, reglas de acceso por usuario, cifrado adecuado y un mecanismo de migraciones/conflictos antes de conectar Supabase.
+
+
+## Importación histórica privada de Excel
+
+Admite fotografías históricas y posiciones de inversión agregadas sin inventar operaciones ni rentabilidad. Importa el JSON privado desde Datos y seguridad → Restaurar copia. Se sustituyen los datos locales existentes, así que haz antes una copia. No subas el JSON real al repositorio público.

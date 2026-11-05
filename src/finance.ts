@@ -41,7 +41,7 @@ export function accountBalance(s:AppState,accountId:string,day=today()):number{
  for(const d of s.dividends){if(d.date<=day&&d.date>=account.openingDate&&d.accountId===accountId)value+=d.gross-d.tax-d.fee}
  return value;
 }
-export function netWorth(s:AppState,day=today()){const cash=sum(s.accounts.filter(a=>a.kind!=='debt').map(a=>accountBalance(s,a.id,day)));const debts=-sum(s.accounts.filter(a=>a.kind==='debt').map(a=>accountBalance(s,a.id,day)));const invested=sum(holdings(s,day).map(h=>h.value));return {cash,invested,debts,total:cash+invested-debts}}
+export function netWorth(s:AppState,day=today()){const cash=sum(s.accounts.filter(a=>a.kind!=='debt').map(a=>accountBalance(s,a.id,day)));const debts=-sum(s.accounts.filter(a=>a.kind==='debt').map(a=>accountBalance(s,a.id,day)));const invested=sum(holdings(s,day).map(h=>h.value))+sum(s.legacyPositions.filter(p=>p.valuationDate<=day).map(p=>p.value));return {cash,invested,debts,total:cash+invested-debts}}
 export function cashFlow(s:AppState,from:string,to:string){
  const between=(d:string)=>d>=from&&d<=to;
  const income=sum(s.movements.filter(m=>m.kind==='income'&&between(m.date)).map(m=>m.amount));

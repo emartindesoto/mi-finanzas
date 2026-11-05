@@ -1,5 +1,5 @@
 /* Mi Finanzas · local-only offline cache. No financial data is stored in Cache Storage. */
-const CACHE='mi-finanzas-static-v1';
+const CACHE='mi-finanzas-static-v2';
 const files=['./','./index.html','./styles.css','./favicon.svg','./manifest.webmanifest','./assets/app.js','./assets/views.js','./assets/store.js','./assets/finance.js','./assets/models.js','./assets/demo.js','./assets/xlsx.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(files)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(names=>Promise.all(names.filter(name=>name.startsWith('mi-finanzas-static-')&&name!==CACHE).map(name=>caches.delete(name)))).then(()=>self.clients.claim()))});

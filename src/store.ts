@@ -9,10 +9,14 @@ export function validateBackup(value:unknown):AppState{
  const v=value as Record<string,unknown>;
  if(v.version!==VERSION)throw Error('Versión de copia no compatible: '+String(v.version));
  for(const key of names){if(!Array.isArray(v[key])||(v[key] as unknown[]).length>100000)throw Error(`Campo inválido: ${key}`);const ids=new Set();for(const item of v[key] as Record<string,unknown>[]){if(!item||typeof item!=='object'||typeof item.id!=='string'||!item.id||ids.has(item.id))throw Error(`Registro/identificador inválido en ${key}`);ids.add(item.id)}}
- const s={...emptyState(),...v,demo:Boolean(v.demo)} as AppState;
+ for(const key of ['snapshots','legacyPositions'])if(v[key]!==undefined&&!Array.isArray(v[key]))throw Error(`Campo inválido: ${key}`);
+ const s={...emptyState(),...v,demo:Boolean(v.demo),snapshots:Array.isArray(v.snapshots)?v.snapshots:[],legacyPositions:Array.isArray(v.legacyPositions)?v.legacyPositions:[]} as AppState;
+ for(const key of ['snapshots','legacyPositions'] as const){const rows=s[key];if(rows.length>100000)throw Error(`Demasiados registros en ${key}`);const keys=new Set<string>();for(const item of rows){if(!item||typeof item.id!=='string'||!item.id||keys.has(item.id))throw Error(`Identificador inválido en ${key}`);keys.add(item.id)}}
  const ids=(key:keyof AppState)=>new Set((s[key] as {id:string}[]).map(x=>x.id));
  const accounts=ids('accounts'),cats=ids('categories'),assets=ids('assets'),portfolios=ids('portfolios');
  const finite=(n:unknown)=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<1e13;
+ for(const snap of s.snapshots){if(!/^\d{4}-\d{2}-\d{2}$/.test(snap.date)||!finite(snap.total)||!snap.source||typeof snap.source!=='string'||(snap.reconciliationGap!==undefined&&(!Number.isFinite(snap.reconciliationGap)||Math.abs(snap.reconciliationGap)>1e13)))throw Error('Fotografía histórica inválida')}
+ for(const pos of s.legacyPositions){if(!/^\d{4}-\d{2}-\d{2}$/.test(pos.valuationDate)||!finite(pos.value)||!pos.name||!pos.platform||!['stock','fund','crypto'].includes(pos.kind))throw Error('Posición agregada inválida')}
  for(const a of s.accounts){if(!a.name||!(a.kind==='debt'?typeof a.openingBalance==='number'&&Number.isFinite(a.openingBalance)&&a.openingBalance<=0&&a.openingBalance>-1e13:finite(a.openingBalance))||!/^(\d{4}-\d{2}-\d{2})$/.test(a.openingDate))throw Error('Cuenta inválida')}
  for(const m of s.movements){if(!accounts.has(m.accountId)||!finite(m.amount)||m.amount<=0||!m.date||!['income','expense','transfer'].includes(m.kind)||m.kind==='transfer'&&(!accounts.has(m.toAccountId??'')||m.toAccountId===m.accountId))throw Error('Movimiento inválido')}
  for(const p of s.payrolls){if(!accounts.has(p.accountId)||![p.gross,p.withholding,p.social,p.flex,p.net].every(finite)||!p.date)throw Error('Nómina inválida')}

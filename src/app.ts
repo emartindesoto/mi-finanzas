@@ -1,4 +1,4 @@
-import {id,today,euro,amount,dateOk,goodMoney,goodPositive,esc,type AppState,type Movement,type Account,type Payroll,type Portfolio,type Asset,type Trade,type Dividend,type PricePoint,type Goal,type Budget,type Recurring,type Category} from './models.js';
+import {id,today,euro,amount,dateOk,goodMoney,goodPositive,esc,type AppState,type LegacyPosition,type Movement,type Account,type Payroll,type Portfolio,type Asset,type Trade,type Dividend,type PricePoint,type Goal,type Budget,type Recurring,type Category} from './models.js';
 import {load,save,validateBackup} from './store.js';
 import {demoState} from './demo.js';
 import {holdings,nextRecurrings,transactionFingerprint,monthlyStats,netWorth} from './finance.js';
@@ -48,6 +48,10 @@ async function saveForm(f:HTMLFormElement){
  if(withholding+social+flex+net>gross+0.02)throw Error('Las deducciones, la retribución flexible y el neto no pueden superar el bruto. Si hay más conceptos positivos, incorpóralos al bruto.');
  updateList(s.payrolls,{id:uid,employer:required(f,'employer'),date:day(f,'date')!,accountId:ref(s.accounts,'Cuenta',required(f,'accountId')),gross,withholding,social,flex,net,note:get('note')});break;
  }
+ case 'legacy':{
+ const kind=get('kind') as LegacyPosition['kind'];if(!['fund','stock','crypto'].includes(kind))throw Error('Tipo de inversión inválido');
+ updateList(s.legacyPositions,{id:uid,name:required(f,'name'),kind,platform:required(f,'platform'),value:money(f,'value'),valuationDate:day(f,'valuationDate')!,note:get('note')});break;
+ }
  case 'portfolio':updateList(s.portfolios,{id:uid,name:required(f,'name'),platform:required(f,'platform')});break;
  case 'asset':{
  const kind=get('kind') as Asset['kind'];if(!['stock','fund','crypto'].includes(kind))throw Error('Clase de activo no válida');
@@ -95,7 +99,7 @@ async function saveForm(f:HTMLFormElement){
  },'Registro guardado y cálculos actualizados.');
 }
 async function deleteRecord(action:string,key:string){
- const conf=({ 'delete-movement':'movements','delete-payroll':'payrolls','delete-account':'accounts','delete-asset':'assets','delete-portfolio':'portfolios','delete-trade':'trades','delete-dividend':'dividends','delete-goal':'goals','delete-recurring':'recurrings','delete-category':'categories','delete-quote':'prices','delete-budget':'budgets' } as Record<string,keyof AppState>)[action];
+ const conf=({ 'delete-movement':'movements','delete-payroll':'payrolls','delete-account':'accounts','delete-asset':'assets','delete-portfolio':'portfolios','delete-trade':'trades','delete-dividend':'dividends','delete-goal':'goals','delete-recurring':'recurrings','delete-category':'categories','delete-quote':'prices','delete-budget':'budgets','delete-legacy':'legacyPositions' } as Record<string,keyof AppState>)[action];
  if(!conf)return;
  const rec=(state[conf] as {id:string}[]).find(v=>v.id===key);if(!rec)return;
  if(!ask('¿Eliminar este registro? Los saldos y cálculos se actualizarán automáticamente.'))return;

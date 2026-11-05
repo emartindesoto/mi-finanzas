@@ -16,9 +16,11 @@ export interface PricePoint {id:ID;assetId:ID;date:string;price:number}
 export interface Goal {id:ID;name:string;target:number;allocated:number;deadline:string;kind:string}
 export interface Budget {id:ID;categoryId:ID;amount:number}
 export interface Recurring {id:ID;kind:'income'|'expense';accountId:ID;categoryId:ID;description:string;amount:number;day:number;startDate:string;active:boolean}
-export interface AppState {version:number;demo:boolean;accounts:Account[];categories:Category[];movements:Movement[];payrolls:Payroll[];portfolios:Portfolio[];assets:Asset[];trades:Trade[];dividends:Dividend[];prices:PricePoint[];goals:Goal[];budgets:Budget[];recurrings:Recurring[]}
+export interface WealthSnapshot {id:ID;date:string;total:number;source:string;note?:string;reconciliationGap?:number}
+export interface LegacyPosition {id:ID;name:string;kind:AssetKind;platform:string;value:number;valuationDate:string;note?:string}
+export interface AppState {version:number;demo:boolean;snapshots:WealthSnapshot[];legacyPositions:LegacyPosition[];accounts:Account[];categories:Category[];movements:Movement[];payrolls:Payroll[];portfolios:Portfolio[];assets:Asset[];trades:Trade[];dividends:Dividend[];prices:PricePoint[];goals:Goal[];budgets:Budget[];recurrings:Recurring[]}
 export const VERSION=1;
-export const emptyState=():AppState=>({version:VERSION,demo:false,accounts:[],categories:[],movements:[],payrolls:[],portfolios:[],assets:[],trades:[],dividends:[],prices:[],goals:[],budgets:[],recurrings:[]});
+export const emptyState=():AppState=>({version:VERSION,demo:false,snapshots:[],legacyPositions:[],accounts:[],categories:[],movements:[],payrolls:[],portfolios:[],assets:[],trades:[],dividends:[],prices:[],goals:[],budgets:[],recurrings:[]});
 export const id=():ID=>crypto.randomUUID();
 export const today=()=>new Date().toLocaleDateString('en-CA',{timeZone:'Europe/Madrid'});
 export const euro=(n:number)=>new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2,maximumFractionDigits:2}).format(Number.isFinite(n)?n:0);
